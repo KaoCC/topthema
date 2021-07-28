@@ -2,8 +2,9 @@ package util
 
 import (
 	"log"
+	"os"
 
-	"github.com/spf13/viper"
+	"github.com/joho/godotenv"
 )
 
 type Record struct {
@@ -13,17 +14,10 @@ type Record struct {
 
 func ReadEnv(key string) string {
 
-	viper.SetConfigFile("app.env")
-	err := viper.ReadInConfig()
-
+	err := godotenv.Load("app.env")
 	if err != nil {
 		log.Fatalf("Error while reading config file %s", err)
 	}
 
-	value, ok := viper.Get(key).(string)
-	if !ok {
-		log.Fatalf("Invalid type assertion")
-	}
-
-	return value
+	return os.Getenv(key)
 }
