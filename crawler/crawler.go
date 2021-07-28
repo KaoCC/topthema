@@ -20,11 +20,12 @@ func New() *crawler {
 	fp := gofeed.NewParser()
 
 	return &crawler{
-		parser: fp,
+		parser:     fp,
+		lastUpdate: util.GetLastTime(),
 	}
 }
 
-/// This function returns nil if there is no update
+/// This function returns nil if there is no update.
 func (crawler *crawler) Parse() *util.Record {
 
 	feed, err := crawler.parser.ParseURL(dwURL)
@@ -49,4 +50,10 @@ func (crawler *crawler) Parse() *util.Record {
 	}
 
 	return nil
+}
+
+/// Save the state of the crawler.
+/// Currently, only the last update time is saved.
+func (crawler *crawler) Save() {
+	util.SetLastTime(crawler.lastUpdate)
 }
