@@ -15,13 +15,14 @@ type crawler struct {
 }
 
 const dwURL string = "https://rss.dw.com/xml/DKpodcast_topthemamitvokabeln_de"
+const filename string = "last.txt"
 
 func New() *crawler {
 	fp := gofeed.NewParser()
 
 	return &crawler{
 		parser:     fp,
-		lastUpdate: util.GetLastTime(),
+		lastUpdate: util.GetLastTime(filename),
 	}
 }
 
@@ -55,5 +56,5 @@ func (crawler *crawler) Parse() *util.Record {
 /// Save the state of the crawler.
 /// Currently, only the last update time is saved.
 func (crawler *crawler) Save() {
-	util.SetLastTime(crawler.lastUpdate)
+	util.SetLastTime(filename, crawler.lastUpdate)
 }

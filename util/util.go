@@ -25,9 +25,7 @@ func ReadEnv(key string) string {
 	return os.Getenv(key)
 }
 
-const filename string = "last.txt"
-
-func GetLastTime() time.Time {
+func GetLastTime(filename string) time.Time {
 
 	data, err := os.ReadFile(filename)
 	if err != nil {
@@ -44,7 +42,7 @@ func GetLastTime() time.Time {
 	return last
 }
 
-func SetLastTime(last time.Time) {
+func SetLastTime(filename string, last time.Time) {
 
 	err := os.WriteFile(filename, []byte(last.Format(time.RFC3339)), 0644)
 
