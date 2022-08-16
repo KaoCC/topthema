@@ -14,8 +14,15 @@ type bot struct {
 	tmpl   *template.Template
 }
 
+const configFile string = "config.json"
+
 func New() *bot {
-	authToken := util.ReadEnv("OAUTH_TOKEN")
+
+	authToken, tokenError := util.ReadToken(configFile)
+	if tokenError != nil {
+		log.Fatal("Failed to read token: ", tokenError)
+	}
+
 	api := slack.New(authToken)
 
 	tmpl := template.New("URL")

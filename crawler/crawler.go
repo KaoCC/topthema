@@ -1,7 +1,6 @@
 package crawler
 
 import (
-	"fmt"
 	"log"
 	"time"
 	"topthema/util"
@@ -26,7 +25,7 @@ func New() *crawler {
 	}
 }
 
-/// This function returns nil if there is no update.
+// This function returns nil if there is no update.
 func (crawler *crawler) Parse() *util.Record {
 
 	feed, err := crawler.parser.ParseURL(dwURL)
@@ -35,7 +34,7 @@ func (crawler *crawler) Parse() *util.Record {
 		return nil
 	}
 
-	fmt.Println(feed.PublishedParsed)
+	log.Println("feed.PublishedParsed: ", feed.PublishedParsed)
 
 	if feed.PublishedParsed.After(crawler.lastUpdate) {
 
@@ -53,8 +52,7 @@ func (crawler *crawler) Parse() *util.Record {
 	return nil
 }
 
-/// Save the state of the crawler.
-/// Currently, only the last update time is saved.
+// Save the state of the crawler. Currently, only the last update time is saved.
 func (crawler *crawler) Save() {
 	util.SetLastTime(filename, crawler.lastUpdate)
 }

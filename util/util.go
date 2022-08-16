@@ -1,11 +1,11 @@
 package util
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"os"
 	"time"
-
-	"github.com/joho/godotenv"
 )
 
 type Record struct {
@@ -13,16 +13,26 @@ type Record struct {
 	Link  string
 }
 
-const envFile string = "app.env"
+type config struct {
+	Token string `json:"OAUTH_TOKEN"`
+}
 
-func ReadEnv(key string) string {
+func ReadToken(configFile string) (string, error) {
 
-	err := godotenv.Load(envFile)
+	content, err := ioutil.ReadFile(configFile)
 	if err != nil {
-		log.Fatalf("Error while reading config file %s", err)
+		log.Println("Error when opening config file: ", err)
+		return "", err
 	}
 
-	return os.Getenv(key)
+	var payload config
+	err = json.Unmarshal(content, &payload)
+	if err != nil {
+		log.Println("Error during Unmarshal(): ", err)
+		return "", err
+	}
+
+	return payload.Token, nil
 }
 
 func GetLastTime(filename string) time.Time {
